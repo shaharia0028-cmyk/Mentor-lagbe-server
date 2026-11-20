@@ -2,8 +2,8 @@
 
 REST API for **MentorLagbe**, a smart tuition and mentorship platform where Tutors post tuition batches, Students apply, and Admins moderate listings, users and Stripe revenue.
 
-- **Live API:** `https://your-server.vercel.app` (replace after deployment)
-- **Client repo / Live site:** `https://your-client.vercel.app` (replace after deployment)
+- **Live API:** [https://mentor-lagbe-server-pi.vercel.app](https://mentor-lagbe-server-pi.vercel.app)
+- **Live site (client):** [https://mentor-lagbe-client-lyart.vercel.app](https://mentor-lagbe-client-lyart.vercel.app)
 
 ## Admin credentials
 
@@ -53,48 +53,4 @@ npm run dev              # http://localhost:5000
 
 ### Environment variables
 
-See `.env.example`. Every secret (MongoDB, BetterAuth, ImgBB, Stripe) is read from `.env`, which is git-ignored.
-
-### Stripe webhook (local)
-
-```bash
-stripe listen --forward-to localhost:5000/api/payments/webhook
-```
-
-Copy the `whsec_...` value it prints into `STRIPE_WEBHOOK_SECRET`. In production, add a webhook endpoint in the Stripe Dashboard pointing to `https://your-server.vercel.app/api/payments/webhook` for the `checkout.session.completed` event.
-
-## API overview
-
-| Method | Path | Access |
-|---|---|---|
-| ALL | `/api/auth/*` | BetterAuth (sign up, sign in, session, `/token`, `/jwks`) |
-| GET | `/api/tuitions` | Public: `search`, `subject`, `classLevel`, `mode`, `page`, `limit` |
-| GET | `/api/tuitions/latest` | Public: 6 latest approved |
-| GET | `/api/tuitions/filters` | Public: dropdown values |
-| GET | `/api/tuitions/:id` | Public: details with tutor summary |
-| GET, POST | `/api/tuitions/mine`, `/api/tuitions` | Tutor |
-| PATCH, DELETE | `/api/tuitions/:id`, `/api/tuitions/:id/status` | Tutor (owner) |
-| POST, GET, DELETE | `/api/applications`, `/mine`, `/:id` | Student |
-| GET, PATCH | `/api/applications/received`, `/:id/status` | Tutor |
-| GET, POST | `/api/bookmarks`, `/ids`, `/:tuitionId` | Student |
-| GET, PATCH | `/api/users/me` | Any logged-in user |
-| POST | `/api/uploads/image` | Any logged-in user (base64 JSON body) |
-| GET, PATCH | `/api/admin/users`, `/users/:id/role` | Admin |
-| GET, PATCH | `/api/admin/tuitions`, `/tuitions/:id/approval` | Admin |
-| POST, GET | `/api/payments/checkout`, `/verify` | Student or Tutor |
-| GET | `/api/payments` | Admin |
-| POST | `/api/payments/webhook` | Stripe |
-| GET | `/api/stats/public`, `/student`, `/tutor`, `/admin` | Public / by role |
-
-Protected routes expect `Authorization: Bearer <jwt>`. The client gets the token with `authClient.token()`.
-
-## Deployment (Vercel)
-
-1. Import this repo in Vercel. `vercel.json` and `api/index.js` already route everything to the Express app.
-2. Add all environment variables from `.env.example` (set `NODE_ENV=production`, `BETTER_AUTH_URL` to the server URL and `CLIENT_URL` to the client URL).
-3. In MongoDB Atlas, allow network access from anywhere (`0.0.0.0/0`) for Vercel.
-4. Add the Stripe webhook endpoint described above.
-
-## npm packages
-
-`express`, `cors`, `dotenv`, `mongodb`, `better-auth`, `@better-auth/mongo-adapter`, `stripe`, `jose`
+See `.env.example`. Every secret (MongoDB, BetterAuth, ImgBB, Stripe) is
